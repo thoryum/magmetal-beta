@@ -14,7 +14,15 @@
   </header>
 
   <main>
-        <input type="text" id="busca" placeholder="Buscar transportadora ou região...">
+           <div class="filtros">
+      <input type="text" id="busca" placeholder="Buscar transportadora ou região...">
+      <select id="filtroRegiao">
+        <option value="">Todas as regiões</option>
+      </select>
+      <select id="filtroVeiculo">
+        <option value="">Todos os veículos</option>
+      </select>
+    </div>
 
     <div id="lista"></div>
   </main>
