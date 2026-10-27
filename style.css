@@ -28,15 +28,42 @@ main {
   margin: 24px auto;
   padding: 0 16px;
 }
+.filtros {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.filtros {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
 #busca {
-  width: 100%;
+  flex: 1;
   box-sizing: border-box;
   padding: 12px 16px;
   font-size: 16px;
   border: 1px solid #bbb;
   border-radius: 6px;
-  margin-bottom: 24px;
 }
+
+.filtros select {
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  background-color: #fff;
+}
+.filtros select {
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
 
 .cartao {
   background-color: #fff;
