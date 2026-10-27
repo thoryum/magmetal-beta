@@ -25,7 +25,10 @@ function desenharLimites(t) {
   });
   return `<p><strong>Exceções:</strong> ${itens.join("; ")}</p>`;
 }
-
+function textoVeiculos(t) {
+  if (!t.tiposVeiculo || t.tiposVeiculo.length === 0) return "Não informado";
+  return t.tiposVeiculo.join(", ");
+}
 function desenharContato(titulo, c) {
   return `
     <div class="contato">
@@ -43,6 +46,7 @@ function desenharCartao(t) {
       <h2>${t.nome}</h2>
       <p><strong>Regiões:</strong> ${t.regioes.join(", ")}</p>
       <p><strong>Transporta 6 m:</strong> ${textoSeis(t)}</p>
+            <p><strong>Tipos de veículo:</strong> ${textoVeiculos(t)}</p>
       ${desenharLimites(t)}
       <div class="contatos">
         ${desenharContato("Expedição", t.contatos.expedicao)}
@@ -55,13 +59,35 @@ function desenharCartao(t) {
 }
 
 const campoBusca = document.getElementById("busca");
+const filtroRegiao = document.getElementById("filtroRegiao");
+const filtroVeiculo = document.getElementById("filtroVeiculo");
 
-function mostrarLista(texto) {
-  const termo = texto.toLowerCase().trim();
+function preencherOpcoes(select, valores) {
+  const unicos = [...new Set(valores)].sort();
+  unicos.forEach(function (v) {
+    select.innerHTML += `<option value="${v}">${v}</option>`;
+  });
+}
+
+preencherOpcoes(filtroRegiao, transportadoras.flatMap(function (t) {
+  return t.regioes;
+}));
+
+preencherOpcoes(filtroVeiculo, transportadoras.flatMap(function (t) {
+  return t.tiposVeiculo || [];
+}));
+
+function mostrarLista() {
+  const termo = campoBusca.value.toLowerCase().trim();
+  const regiao = filtroRegiao.value;
+  const veiculo = filtroVeiculo.value;
 
   const filtradas = transportadoras.filter(function (t) {
-    const alvo = (t.nome + " " + t.regioes.join(" ")).toLowerCase();
-    return alvo.includes(termo);
+    const alvo = (t.nome + " " + t.regioes.join(" ") + " " + (t.tiposVeiculo || []).join(" ")).toLowerCase();
+    const bateBusca = alvo.includes(termo);
+    const bateRegiao = regiao === "" || t.regioes.includes(regiao);
+    const bateVeiculo = veiculo === "" || (t.tiposVeiculo || []).includes(veiculo);
+    return bateBusca && bateRegiao && bateVeiculo;
   });
 
   if (filtradas.length === 0) {
@@ -72,8 +98,8 @@ function mostrarLista(texto) {
   lista.innerHTML = filtradas.map(desenharCartao).join("");
 }
 
-campoBusca.addEventListener("input", function () {
-  mostrarLista(campoBusca.value);
-});
+campoBusca.addEventListener("input", mostrarLista);
+filtroRegiao.addEventListener("change", mostrarLista);
+filtroVeiculo.addEventListener("change", mostrarLista);
 
-mostrarLista("");
+mostrarLista();
